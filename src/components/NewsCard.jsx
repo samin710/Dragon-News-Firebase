@@ -1,7 +1,16 @@
 import { FaEye, FaStar, FaShareAlt, FaRegBookmark } from "react-icons/fa";
+import { Link } from "react-router";
 
 const NewsCard = ({ news }) => {
-  const { title, author, thumbnail_url, details, rating, total_view } = news;
+  const {
+    id,
+    title = "",
+    author = {},
+    thumbnail_url,
+    details = "",
+    rating = { number: 0 },
+    total_view = 0,
+  } = news || {};
 
   const formattedDate = new Date(
     news.author.published_date
@@ -49,9 +58,12 @@ const NewsCard = ({ news }) => {
         {details.length > 200 ? (
           <>
             {details.slice(0, 200)}...
-            <span className="text-primary font-semibold cursor-pointer hover:underline">
+            <Link
+              to={`/news-details/${id}`}
+              className="text-primary font-semibold cursor-pointer hover:underline"
+            >
               Read More
-            </span>
+            </Link>
           </>
         ) : (
           details
@@ -62,9 +74,11 @@ const NewsCard = ({ news }) => {
       <div className="flex justify-between items-center px-4 py-3 border-t border-base-200 mt-3">
         {/* Rating */}
         <div className="flex items-center gap-1 text-orange-400">
-          {Array.from({ length: rating.number }).map((_, i) => (
-            <FaStar key={i} />
-          ))}
+          {Array.from({ length: Math.round(rating?.number || 0) }).map(
+            (_, i) => (
+              <FaStar key={i} />
+            )
+          )}
           <span className="ml-2 text-gray-600">{rating.number}</span>
         </div>
 
